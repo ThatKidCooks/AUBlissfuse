@@ -1,0 +1,30 @@
+name: AUBlissFuse
+version: '1.0-SNAPSHOT'
+main: site.thatkid.aUBlissFuse.AUBlissFuse
+api-version: '1.21'
+
+commands:
+  spawnguide:
+    description: Spawn your instruction villager
+    usage: /spawnguide
+  spawnchicken:
+    description: Spawns a chicken who just wants seeds or so you think
+    usage: /spawnchicken
+  give_mace_key:
+    description: Give a mace key item
+    usage: /give_mace_key
+    permission: blissfuse.give
+  give_teleporter:
+    description: Give a teleporter block
+    usage: /give_teleporter
+    permission: blissfuse.give
+
+permissions:
+  customvillager.spawn:
+    default: op
+  blissfuse.give:
+    default: op
+
+
+authors: [ ItsMinechook ]
+website: thatkid.site
