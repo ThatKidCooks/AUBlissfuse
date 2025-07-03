@@ -1,11 +1,14 @@
-package site.thatkid.aUBlissFuse.custom.mobs;
+package site.thatkid.aUBlissFuse.listeners.mobs;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.WitherSkeleton;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -38,10 +41,25 @@ public class WitherBossListener implements Listener {
 
         // Apply blindness: duration in ticks (20 ticks = 1 second), amplifier 1
         player.addPotionEffect(
-                new PotionEffect(PotionEffectType.BLINDNESS, 20 * 5, 0)
+                new PotionEffect(PotionEffectType.BLINDNESS, 20 * 2, 0)
         );
 
-        // Optional: send feedback or play sound
+        // send feedback or play sound
         player.sendMessage(ChatColor.DARK_PURPLE + "You have been blinded by The Ancient Guardian!");
+        player.playSound(player.getLocation(), Sound.ENTITY_ELDER_GUARDIAN_CURSE, 1, 1);
+    }
+
+    // check if it dies
+    @EventHandler
+    public void onBossDeath(EntityDeathEvent event) {
+        if (!(event.getEntity() instanceof WitherSkeleton)) {
+            return;
+        }
+
+        if (event.getEntity().getPersistentDataContainer().get(AUBlissFuse.BOSS_KEY, PersistentDataType.BYTE) != (byte) 1) {
+            Player player = (Player) event.getDamageSource();
+
+            player.removePotionEffect(PotionEffectType.MINING_FATIGUE);
+        }
     }
 }

@@ -4,11 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Chicken;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Villager;
-import org.bukkit.event.Listener;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,23 +14,29 @@ import site.thatkid.aUBlissFuse.listeners.MobProtectListener;
 import site.thatkid.aUBlissFuse.listeners.mobs.ChickenClickListener;
 import site.thatkid.aUBlissFuse.listeners.mobs.VillagerClickListener;
 import site.thatkid.aUBlissFuse.listeners.blocks.TeleporterBlockListener;
+import site.thatkid.aUBlissFuse.listeners.mobs.WitherBossListener;
 
 public final class AUBlissFuse extends JavaPlugin {
 
     private static AUBlissFuse instance;
 
     public static NamespacedKey GUIDE_KEY;
+    public static NamespacedKey BOSS_KEY;
     public static NamespacedKey CHICKEN_KEY;
+    public static NamespacedKey IRON_GOLEM_KEY;
 
     @Override
     public void onEnable() {
         instance = this;
         GUIDE_KEY = new NamespacedKey(this, "is_guide");
         CHICKEN_KEY = new NamespacedKey(this, "is_chicken");
+        BOSS_KEY = new NamespacedKey(this, "is_boss");
+        IRON_GOLEM_KEY = new NamespacedKey(this, "is_iron_golem");
 
         getServer().getPluginManager().registerEvents(new VillagerClickListener(this), this);
         getServer().getPluginManager().registerEvents(new ChickenClickListener(this), this);
         getServer().getPluginManager().registerEvents(new MobProtectListener(), this);
+        getServer().getPluginManager().registerEvents(new WitherBossListener(), this);
 
         getServer().getPluginManager().registerEvents(new TeleporterBlockListener(), this);
 
@@ -81,7 +83,27 @@ public final class AUBlissFuse extends JavaPlugin {
                 chicken.setCustomNameVisible(true);
                 chicken.getPersistentDataContainer()
                         .set(CHICKEN_KEY, PersistentDataType.BYTE, (byte) 1);
-                player.sendMessage("Chicken 1 spawned!");
+                player.sendMessage("Chicken spawned!");
+                return true;
+            }
+        }
+
+        if (label.equalsIgnoreCase("spawnirongolem") && sender instanceof Player) {
+            if (!sender.hasPermission("customvillager.spawn")) {
+                sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+            }
+            else  {
+                Player player = (Player) sender;
+                IronGolem irongolem = (IronGolem) player.getWorld()
+                        .spawnEntity(player.getLocation(), EntityType.IRON_GOLEM);
+
+                irongolem.setCustomName("Possible");
+                irongolem.setAI(false);
+                irongolem.setGlowing(true);
+                irongolem.setCustomNameVisible(true);
+                irongolem.getPersistentDataContainer()
+                        .set(IRON_GOLEM_KEY, PersistentDataType.BYTE, (byte) 1);
+                player.sendMessage("Possible spawned!");
                 return true;
             }
         }

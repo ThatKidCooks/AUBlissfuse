@@ -7,6 +7,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import site.thatkid.aUBlissFuse.custom.blocks.TeleporterBlock;
+import site.thatkid.aUBlissFuse.custom.mobs.WitherBoss;
 
 public class TeleporterBlockListener implements Listener {
     
@@ -34,7 +35,9 @@ public class TeleporterBlockListener implements Listener {
 
             event.setCancelled(true);
 
-            TeleporterBlock.onTeleporterInteract(event.getPlayer(), event.getClickedBlock());
+            if (TeleporterBlock.onTeleporterInteract(event.getPlayer(), event.getClickedBlock())) {
+                WitherBoss.createBoss(event.getPlayer());
+            }
         }
     }
 }

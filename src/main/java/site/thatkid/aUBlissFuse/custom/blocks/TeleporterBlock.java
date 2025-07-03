@@ -82,7 +82,7 @@ public class TeleporterBlock {
     }
 
     public static boolean onTeleporterInteract(Player player, Block block) {
-        if (player.getInventory().getItemInMainHand().equals(MaceKey.createMaceStack())) {
+        if (!player.getInventory().getItemInMainHand().equals(MaceKey.createMaceStack())) {
             player.sendMessage("§cGet the Correct Item");
             return false;
         }
@@ -99,6 +99,7 @@ public class TeleporterBlock {
                 return false;
             }
         }
+            player.getInventory().removeItem(MaceKey.createMaceStack());
             performTeleportation(player, block);
 
         cooldowns.put(playerId, currentTime);

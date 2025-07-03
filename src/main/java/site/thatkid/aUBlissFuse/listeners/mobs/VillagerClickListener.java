@@ -33,7 +33,7 @@ public class VillagerClickListener implements Listener {
                 player.sendMessage("§eHello adventurer! I'm hun-");
                 player.sendMessage("§6Ohh, you got me one.");
                 player.sendMessage("§9I guess I have to tell you where the mace is...");
-                player.sendMessage("§e Ask the chicken at 100, 100 and leave me to eat this in piece.");
+                player.sendMessage("§eAsk the chicken at 100, 100 and leave me to eat this in piece.");
             } else {
                 Player player = event.getPlayer();
                 player.sendMessage("§eHello adventurer! I'm hungry!");
