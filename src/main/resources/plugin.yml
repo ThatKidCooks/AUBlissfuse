@@ -26,6 +26,10 @@ commands:
     description: adds someone to the mace event list
     usage: /addplayer
     permission: op
+  finalplayers:
+    description: Lists all players from players.json
+    usage: /finalplayers
+    permission: op
 
 permissions:
   customvillager.spawn:

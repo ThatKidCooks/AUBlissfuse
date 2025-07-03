@@ -13,6 +13,7 @@ import org.bukkit.persistence.PersistentDataType;
 import site.thatkid.aUBlissFuse.AUBlissFuse;
 import site.thatkid.aUBlissFuse.custom.items.MaceKey;
 import site.thatkid.aUBlissFuse.listeners.mobs.connections.Connections;
+import site.thatkid.aUBlissFuse.listeners.mobs.connections.EntityConnections;
 
 import java.util.*;
 
@@ -63,6 +64,7 @@ public class IronGolemClickListener implements Listener {
                 player.sendMessage("§9But since I only tell you riddles");
                 player.sendMessage("§eWhat's hurdling towards earth. Apep!");
                 player.getInventory().setItemInMainHand(MaceKey.createMaceStack());
+                Connections.connectionsMap.put(playerId, new EntityConnections(true, true, true));
             } else {
                 player.sendMessage("§eHello adventurer! I have a riddle");
                 player.sendMessage("§6I’m born of ore in caverns deep,");

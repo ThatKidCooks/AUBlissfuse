@@ -10,11 +10,24 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import site.thatkid.aUBlissFuse.AUBlissFuse;
+import site.thatkid.aUBlissFuse.custom.jsonsaver.PlayerEntry;
+
+import java.time.Instant;
+
+import static site.thatkid.aUBlissFuse.AUBlissFuse.playerEntries;
 
 public class WitherBossListener implements Listener {
+
+    private Plugin plugin;
+
+    public WitherBossListener(Plugin plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
     public void onBossHit(EntityDamageByEntityEvent event) {
@@ -61,6 +74,16 @@ public class WitherBossListener implements Listener {
 
             player.removePotionEffect(PotionEffectType.MINING_FATIGUE);
             player.teleport(new Location(player.getWorld(), 0, 65, 0));
+
+            boolean exists = playerEntries.stream()
+                    .anyMatch(entry -> entry.getName().equalsIgnoreCase(player.getName()));
+            if (exists) {
+                return;
+            }
+
+            String timestamp = Instant.now().toString();
+            playerEntries.add(new PlayerEntry(player.getName(), timestamp));
+            JavaPlugin.getPlugin(AUBlissFuse.class).savePlayerList(playerEntries);
         }
     }
 }
