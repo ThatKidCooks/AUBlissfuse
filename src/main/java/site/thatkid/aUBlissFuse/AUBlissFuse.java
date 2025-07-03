@@ -11,6 +11,8 @@ import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import site.thatkid.aUBlissFuse.custom.items.MaceKey;
 import site.thatkid.aUBlissFuse.custom.blocks.TeleporterBlock;
 import site.thatkid.aUBlissFuse.custom.jsonsaver.PlayerEntry;
@@ -94,6 +96,8 @@ public final class AUBlissFuse extends JavaPlugin {
             villager.setCustomNameVisible(true);
             villager.getPersistentDataContainer()
                     .set(GUIDE_KEY, PersistentDataType.BYTE, (byte) 1);
+            villager.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, 0));
+            villager.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, Integer.MAX_VALUE, 255));
             player.sendMessage("Guide spawned!");
             return true;
         }
@@ -113,6 +117,8 @@ public final class AUBlissFuse extends JavaPlugin {
             chicken.setCustomNameVisible(true);
             chicken.getPersistentDataContainer()
                     .set(CHICKEN_KEY, PersistentDataType.BYTE, (byte) 1);
+            chicken.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, 0));
+            chicken.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, Integer.MAX_VALUE, 255));
             player.sendMessage("Chicken spawned!");
             return true;
         }
@@ -131,6 +137,8 @@ public final class AUBlissFuse extends JavaPlugin {
             ironGolem.setCustomNameVisible(true);
             ironGolem.getPersistentDataContainer()
                     .set(IRON_GOLEM_KEY, PersistentDataType.BYTE, (byte) 1);
+            ironGolem.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, 0));
+            ironGolem.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, Integer.MAX_VALUE, 255));
             player.sendMessage("Possible spawned!");
             return true;
         }
