@@ -56,8 +56,8 @@ public class WitherBossListener implements Listener {
             return;
         }
 
-        if (event.getEntity().getPersistentDataContainer().get(AUBlissFuse.BOSS_KEY, PersistentDataType.BYTE) != (byte) 1) {
-            Player player = (Player) event.getDamageSource();
+        if (event.getEntity().getPersistentDataContainer().get(AUBlissFuse.BOSS_KEY, PersistentDataType.BYTE) == (byte) 1) {
+            Player player = (Player) event.getEntity().getKiller();
 
             player.removePotionEffect(PotionEffectType.MINING_FATIGUE);
         }

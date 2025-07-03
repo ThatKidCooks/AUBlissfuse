@@ -59,7 +59,6 @@ public class ChickenClickListener implements Listener {
                 player.sendMessage(ChatColor.YELLOW + "Oh finally took you long enough");
                 player.sendMessage(ChatColor.GREEN + "Now I can upgrade my armour");
                 player.sendMessage(ChatColor.GREEN + "Here ya go");
-                player.getInventory().setItemInMainHand(MaceKey.createMaceStack());
                 player.sendMessage(ChatColor.RED + "The iron golem know where it is at *** ***");
                 player.sendMessage(ChatColor.RED + "Now SCRAM!!!");
 

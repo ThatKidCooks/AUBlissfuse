@@ -52,12 +52,13 @@ public class IronGolemClickListener implements Listener {
                               .get(plugin.IRON_GOLEM_KEY, PersistentDataType.BYTE);
 
         if (isGuide != null && isGuide == (byte) 1) {
-            if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.IRON_BLOCK && event.getPlayer().getInventory().getItemInMainHand().getAmount() > 5) {
+            if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.IRON_BLOCK && event.getPlayer().getInventory().getItemInMainHand().getAmount() > 9) {
                 player.getInventory().setItemInMainHand(null);
                 player.sendMessage("§eHello adventurer! I have a ri--");
                 player.sendMessage("§6Ohh, you figured it out");
                 player.sendMessage("§9But since I only tell you riddles");
                 player.sendMessage("§eWhat's hurdling towards earth. Apep!");
+                player.getInventory().setItemInMainHand(MaceKey.createMaceStack());
             } else {
                 player.sendMessage("§eHello adventurer! I have a riddle");
                 player.sendMessage("§6I’m born of ore in caverns deep,");

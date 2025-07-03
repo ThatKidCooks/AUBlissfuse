@@ -1,5 +1,8 @@
 package site.thatkid.aUBlissFuse;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
@@ -10,12 +13,18 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import site.thatkid.aUBlissFuse.custom.items.MaceKey;
 import site.thatkid.aUBlissFuse.custom.blocks.TeleporterBlock;
+import site.thatkid.aUBlissFuse.custom.jsonsaver.PlayerEntry;
 import site.thatkid.aUBlissFuse.listeners.MobProtectListener;
 import site.thatkid.aUBlissFuse.listeners.mobs.ChickenClickListener;
 import site.thatkid.aUBlissFuse.listeners.mobs.IronGolemClickListener;
 import site.thatkid.aUBlissFuse.listeners.mobs.VillagerClickListener;
 import site.thatkid.aUBlissFuse.listeners.blocks.TeleporterBlockListener;
 import site.thatkid.aUBlissFuse.listeners.mobs.WitherBossListener;
+
+import java.io.*;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class AUBlissFuse extends JavaPlugin {
 
@@ -25,6 +34,9 @@ public final class AUBlissFuse extends JavaPlugin {
     public static NamespacedKey BOSS_KEY;
     public static NamespacedKey CHICKEN_KEY;
     public static NamespacedKey IRON_GOLEM_KEY;
+
+    private final File listFile = new File(getDataFolder(), "players.json");
+    private List<PlayerEntry> playerEntries;
 
     @Override
     public void onEnable() {
@@ -44,6 +56,9 @@ public final class AUBlissFuse extends JavaPlugin {
 
         ItemStack mace_key = MaceKey.createMaceStack();
         ItemStack teleport_block = TeleporterBlock.createTeleporterItem();
+
+        if (!getDataFolder().exists()) getDataFolder().mkdirs();
+        playerEntries = loadPlayerList();
     }
 
     @Override
@@ -93,8 +108,7 @@ public final class AUBlissFuse extends JavaPlugin {
         if (label.equalsIgnoreCase("spawnirongolem") && sender instanceof Player) {
             if (!sender.hasPermission("customvillager.spawn")) {
                 sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
-            }
-            else  {
+            } else {
                 Player player = (Player) sender;
                 IronGolem irongolem = (IronGolem) player.getWorld()
                         .spawnEntity(player.getLocation(), EntityType.IRON_GOLEM);
@@ -129,6 +143,28 @@ public final class AUBlissFuse extends JavaPlugin {
             return true;
         }
 
+        if (label.equalsIgnoreCase("addplayer") && sender instanceof Player) {
+
+            Player player = (Player) sender;
+            String name = player.getName();
+
+            // Prevent duplicates (optional)
+            boolean already = playerEntries.stream()
+                    .anyMatch(entry -> entry.getName().equalsIgnoreCase(name));
+            if (already) {
+                player.sendMessage("You’re already on the list!");
+                return true;
+            }
+
+            // Record ISO timestamp (UTC)
+            String now = Instant.now().toString();
+            playerEntries.add(new PlayerEntry(name, now));
+            savePlayerList(playerEntries);
+
+            player.sendMessage("Added you at " + now + ". Total entries: "
+                    + playerEntries.size());
+            return false;
+        }
         return false;
     }
 
@@ -139,5 +175,27 @@ public final class AUBlissFuse extends JavaPlugin {
 
     public static AUBlissFuse getInstance() {
         return instance;
+    }
+
+    private List<PlayerEntry> loadPlayerList() {
+        if (!listFile.exists()) {
+            List<PlayerEntry> empty = new ArrayList<>();
+            savePlayerList(empty);
+            return empty;
+        }
+        try (Reader reader = new FileReader(listFile)) {
+            return new Gson().fromJson(reader, new TypeToken<List<PlayerEntry>>() {}.getType());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    private void savePlayerList(List<PlayerEntry> entries) {
+        try (Writer writer = new FileWriter(listFile)) {
+            new GsonBuilder().setPrettyPrinting().create().toJson(entries, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

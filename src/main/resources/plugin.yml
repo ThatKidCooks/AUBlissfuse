@@ -22,6 +22,11 @@ commands:
     usage: /give_teleporter
     permission: blissfuse.give
 
+  addplayer:
+    description: adds someone to the mace event list
+    usage: /addplayer
+    permission: op
+
 permissions:
   customvillager.spawn:
     default: op
