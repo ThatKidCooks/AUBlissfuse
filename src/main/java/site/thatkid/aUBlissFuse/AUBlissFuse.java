@@ -106,7 +106,7 @@ public final class AUBlissFuse extends JavaPlugin {
             Player player = (Player) sender;
             Chicken chicken = (Chicken) player.getWorld()
                     .spawnEntity(player.getLocation(), EntityType.CHICKEN);
-            chicken.setCustomName("§aChicken");
+            chicken.setCustomName("§aChicken God");
             chicken.setAI(false);
             chicken.setBaby();
             chicken.setGlowing(true);
