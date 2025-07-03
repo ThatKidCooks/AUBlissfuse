@@ -12,6 +12,7 @@ import site.thatkid.aUBlissFuse.custom.items.MaceKey;
 import site.thatkid.aUBlissFuse.custom.blocks.TeleporterBlock;
 import site.thatkid.aUBlissFuse.listeners.MobProtectListener;
 import site.thatkid.aUBlissFuse.listeners.mobs.ChickenClickListener;
+import site.thatkid.aUBlissFuse.listeners.mobs.IronGolemClickListener;
 import site.thatkid.aUBlissFuse.listeners.mobs.VillagerClickListener;
 import site.thatkid.aUBlissFuse.listeners.blocks.TeleporterBlockListener;
 import site.thatkid.aUBlissFuse.listeners.mobs.WitherBossListener;
@@ -35,6 +36,7 @@ public final class AUBlissFuse extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new VillagerClickListener(this), this);
         getServer().getPluginManager().registerEvents(new ChickenClickListener(this), this);
+        getServer().getPluginManager().registerEvents(new IronGolemClickListener(this), this);
         getServer().getPluginManager().registerEvents(new MobProtectListener(), this);
         getServer().getPluginManager().registerEvents(new WitherBossListener(), this);
 

@@ -1,9 +1,6 @@
 package site.thatkid.aUBlissFuse.listeners;
 
-import org.bukkit.entity.Chicken;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Villager;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -49,6 +46,16 @@ public class MobProtectListener implements Listener {
                     .get(AUBlissFuse.CHICKEN_KEY, PersistentDataType.BYTE);
 
             if (isChicken != null && isChicken == (byte) 1) {
+                event.setCancelled(true);
+            }
+        }
+
+        if (target instanceof IronGolem) {
+            IronGolem ironGolem = (IronGolem) target;
+            Byte isIronGolem = ironGolem.getPersistentDataContainer()
+                    .get(AUBlissFuse.IRON_GOLEM_KEY, PersistentDataType.BYTE);
+
+            if (isIronGolem != null && isIronGolem == (byte) 1) {
                 event.setCancelled(true);
             }
         }

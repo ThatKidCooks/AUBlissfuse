@@ -10,6 +10,9 @@ commands:
   spawnchicken:
     description: Spawns a chicken who just wants seeds or so you think
     usage: /spawnchicken
+  spawnirongolem:
+    description: Spawns an iron golem who wants riches
+    usage: /spawnirongolem
   give_mace_key:
     description: Give a mace key item
     usage: /give_mace_key

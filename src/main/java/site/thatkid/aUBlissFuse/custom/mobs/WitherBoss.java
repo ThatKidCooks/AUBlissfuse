@@ -43,11 +43,13 @@ public class WitherBoss implements Listener {
         maxHealth.setBaseValue(200.0);
         boss.setHealth(200.0);
 
+        AttributeInstance damage = boss.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
+        damage.setBaseValue(40.0);
+
         // 4) Core buffs
         boss.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2));
         boss.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, 1));
         boss.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, Integer.MAX_VALUE, 2));
-        boss.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, Integer.MAX_VALUE, 1));
 
         // 5) Simulate regeneration
         new BukkitRunnable() {
@@ -62,7 +64,7 @@ public class WitherBoss implements Listener {
                 boss.setHealth(Math.min(max, health + 2.0));
             }
         }
-        .runTaskTimer(AUBlissFuse.getInstance(), 0L, 20L);
+        .runTaskTimer(AUBlissFuse.getInstance(), 0L, 10L);
     }
 
 

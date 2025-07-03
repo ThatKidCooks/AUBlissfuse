@@ -13,8 +13,14 @@ import org.bukkit.persistence.PersistentDataType;
 import site.thatkid.aUBlissFuse.AUBlissFuse;
 import site.thatkid.aUBlissFuse.custom.items.MaceKey;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 public class ChickenClickListener implements Listener {
     private final AUBlissFuse plugin;
+    private static final Map<UUID, Long> cooldowns = new HashMap<>();
+    private static final long COOLDOWN_TIME = 3000;
 
     public ChickenClickListener(AUBlissFuse plugin) {
         this.plugin = plugin;
@@ -22,13 +28,30 @@ public class ChickenClickListener implements Listener {
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+        Player player = (Player) event.getPlayer();
+
+        UUID playerId = player.getUniqueId();
+        long currentTime = System.currentTimeMillis();
+
+        if (cooldowns.containsKey(playerId)) {
+            long lastUse = cooldowns.get(playerId);
+            if (currentTime - lastUse < COOLDOWN_TIME) {
+                long remaining = (COOLDOWN_TIME - (currentTime - lastUse)) / 1000;
+                return;
+            }
+        }
+        player.getInventory().removeItem(MaceKey.createMaceStack());
+
+        cooldowns.put(playerId, currentTime);
+
+        cleanupOldCooldowns();
+
         Entity clicked = event.getRightClicked();
         if (!(clicked instanceof Chicken)) return;
 
         Chicken chicken = (Chicken) clicked;
         Byte isChicken = chicken.getPersistentDataContainer()
                 .get(plugin.CHICKEN_KEY, PersistentDataType.BYTE);
-        Player player = (Player) event.getPlayer();
 
         if (isChicken != null && isChicken == (byte) 1) {
             if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.NETHERITE_INGOT) {
@@ -37,15 +60,8 @@ public class ChickenClickListener implements Listener {
                 player.sendMessage(ChatColor.GREEN + "Now I can upgrade my armour");
                 player.sendMessage(ChatColor.GREEN + "Here ya go");
                 player.getInventory().setItemInMainHand(MaceKey.createMaceStack());
-                player.sendMessage(ChatColor.GREEN + "Oh finally, now what do you want?");
-                player.sendMessage("");
-                player.sendMessage("");
-                player.sendMessage("");
-                player.sendMessage("");
-                player.sendMessage("");
-                player.sendMessage("");
-                player.sendMessage(ChatColor.RED + "Also Apep!");
-                player.sendMessage(ChatColor.RED + "You heard me Apep. Now scram.");
+                player.sendMessage(ChatColor.RED + "The iron golem know where it is at *** ***");
+                player.sendMessage(ChatColor.RED + "Now SCRAM!!!");
 
                 event.setCancelled(true);
             } else if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.TORCHFLOWER_SEEDS) {
@@ -72,5 +88,10 @@ public class ChickenClickListener implements Listener {
             }
 
         }
+    }
+
+    public void cleanupOldCooldowns() {
+        long currentTime = System.currentTimeMillis();
+        cooldowns.entrySet().removeIf(entry -> currentTime - entry.getValue() > COOLDOWN_TIME * 2);
     }
 }
