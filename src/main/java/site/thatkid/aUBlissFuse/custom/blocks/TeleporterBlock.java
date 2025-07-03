@@ -9,6 +9,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import site.thatkid.aUBlissFuse.AUBlissFuse;
 import site.thatkid.aUBlissFuse.custom.items.MaceKey;
+import site.thatkid.aUBlissFuse.listeners.mobs.connections.Connections;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -84,6 +85,11 @@ public class TeleporterBlock {
     public static boolean onTeleporterInteract(Player player, Block block) {
         if (!player.getInventory().getItemInMainHand().equals(MaceKey.createMaceStack())) {
             player.sendMessage("§cGet the Correct Item");
+            return false;
+        }
+
+        if (!Connections.isConnected(player.getUniqueId(), "ironGolem")) {
+            player.sendMessage(ChatColor.RED + "How did you get the mace key??");
             return false;
         }
 

@@ -12,6 +12,8 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.persistence.PersistentDataType;
 import site.thatkid.aUBlissFuse.AUBlissFuse;
 import site.thatkid.aUBlissFuse.custom.items.MaceKey;
+import site.thatkid.aUBlissFuse.listeners.mobs.connections.Connections;
+import site.thatkid.aUBlissFuse.listeners.mobs.connections.EntityConnections;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,14 +56,17 @@ public class ChickenClickListener implements Listener {
                 .get(plugin.CHICKEN_KEY, PersistentDataType.BYTE);
 
         if (isChicken != null && isChicken == (byte) 1) {
-            if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.NETHERITE_INGOT) {
+            if (!Connections.isConnected(playerId, "villager")) {
+                player.sendMessage(ChatColor.YELLOW + "Who in this world sent you");
+                player.sendMessage(ChatColor.YELLOW + "Talk to someone worthy, BEFORE TALKING TO ME.");
+            } else if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.NETHERITE_INGOT) {
                 player.getInventory().setItemInMainHand(null);
                 player.sendMessage(ChatColor.YELLOW + "Oh finally took you long enough");
                 player.sendMessage(ChatColor.GREEN + "Now I can upgrade my armour");
                 player.sendMessage(ChatColor.GREEN + "Here ya go");
                 player.sendMessage(ChatColor.RED + "The iron golem know where it is at *** ***");
                 player.sendMessage(ChatColor.RED + "Now SCRAM!!!");
-
+                Connections.connectionsMap.put(playerId, new EntityConnections(true, true, Connections.isConnected(playerId, "ironGolem")));
                 event.setCancelled(true);
             } else if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.TORCHFLOWER_SEEDS) {
                 player.getInventory().setItemInMainHand(null);
@@ -79,9 +84,7 @@ public class ChickenClickListener implements Listener {
             player.spawnParticle(Particle.ANGRY_VILLAGER, player.getLocation().add(0.5, 0.5, 0.5), 50);
                 player.sendMessage(ChatColor.YELLOW + "NO TUPID!");
                 player.sendMessage(ChatColor.BLUE + "I want Torchflower Seeds");
-            }
-
-            else {
+            } else {
                 player.sendMessage(ChatColor.RED + "GIVE ME SEEDS! NOW!!! THEN WE CAN TALK!");
                 event.setCancelled(true);
             }

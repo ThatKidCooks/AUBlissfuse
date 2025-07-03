@@ -60,6 +60,7 @@ public class WitherBossListener implements Listener {
             Player player = (Player) event.getEntity().getKiller();
 
             player.removePotionEffect(PotionEffectType.MINING_FATIGUE);
+            player.teleport(new Location(player.getWorld(), 0, 65, 0));
         }
     }
 }

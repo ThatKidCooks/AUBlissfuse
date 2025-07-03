@@ -10,6 +10,8 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.persistence.PersistentDataType;
 import site.thatkid.aUBlissFuse.AUBlissFuse;
 import site.thatkid.aUBlissFuse.custom.items.MaceKey;
+import site.thatkid.aUBlissFuse.listeners.mobs.connections.Connections;
+import site.thatkid.aUBlissFuse.listeners.mobs.connections.EntityConnections;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,6 +60,7 @@ public class VillagerClickListener implements Listener {
                 player.sendMessage("§6Ohh, you got me one.");
                 player.sendMessage("§9I guess I have to tell you where the mace is...");
                 player.sendMessage("§eAsk the chicken at 100, 100 and leave me to eat this in piece.");
+                Connections.connectionsMap.put(playerId, new EntityConnections(true, Connections.isConnected(playerId, "chicken"), Connections.isConnected(playerId, "ironGolem")));
             } else {
                 player.sendMessage("§eHello adventurer! I'm hungry!");
                 player.sendMessage("§6Maybe I won't kill you");

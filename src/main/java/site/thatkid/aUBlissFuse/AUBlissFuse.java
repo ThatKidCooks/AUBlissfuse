@@ -20,6 +20,7 @@ import site.thatkid.aUBlissFuse.listeners.mobs.IronGolemClickListener;
 import site.thatkid.aUBlissFuse.listeners.mobs.VillagerClickListener;
 import site.thatkid.aUBlissFuse.listeners.blocks.TeleporterBlockListener;
 import site.thatkid.aUBlissFuse.listeners.mobs.WitherBossListener;
+import site.thatkid.aUBlissFuse.listeners.mobs.connections.Connections;
 
 import java.io.*;
 import java.time.Instant;
@@ -36,6 +37,8 @@ public final class AUBlissFuse extends JavaPlugin {
     public static NamespacedKey IRON_GOLEM_KEY;
 
     private final File listFile = new File(getDataFolder(), "players.json");
+    private final File connectionsFile = new File(getDataFolder(), "connections.json");
+
     private List<PlayerEntry> playerEntries;
 
     @Override
@@ -59,11 +62,15 @@ public final class AUBlissFuse extends JavaPlugin {
 
         if (!getDataFolder().exists()) getDataFolder().mkdirs();
         playerEntries = loadPlayerList();
+
+        Connections.loadConnections(connectionsFile);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (label.equalsIgnoreCase("spawnguide") && sender instanceof Player) {
+        String name = cmd.getName().toLowerCase();
+
+        if (name.equals("spawnguide") && sender instanceof Player) {
             if (!sender.hasPermission("customvillager.spawn")) {
                 sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                 return true;
@@ -85,7 +92,7 @@ public final class AUBlissFuse extends JavaPlugin {
             }
         }
 
-        if (label.equalsIgnoreCase("spawnchicken") && sender instanceof Player) {
+        if (name.equals("spawnchicken") && sender instanceof Player) {
             if (!sender.hasPermission("customvillager.spawn")) {
                 sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
             } else {
@@ -105,7 +112,7 @@ public final class AUBlissFuse extends JavaPlugin {
             }
         }
 
-        if (label.equalsIgnoreCase("spawnirongolem") && sender instanceof Player) {
+        if (name.equals("spawnirongolem") && sender instanceof Player) {
             if (!sender.hasPermission("customvillager.spawn")) {
                 sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
             } else {
@@ -124,13 +131,13 @@ public final class AUBlissFuse extends JavaPlugin {
             }
         }
 
-        if (label.equalsIgnoreCase("give_mace_key") && sender instanceof Player) {
+        if (name.equals("give_mace_key") && sender instanceof Player) {
             Player p = (Player) sender;
             p.getInventory().addItem(MaceKey.createMaceStack());
             return true;
         }
 
-        if (label.equalsIgnoreCase("give_teleporter") && sender instanceof Player) {
+        if (name.equals("give_teleporter") && sender instanceof Player) {
             if (!sender.hasPermission("blissfuse.give")) {
                 sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                 return true;
@@ -143,34 +150,44 @@ public final class AUBlissFuse extends JavaPlugin {
             return true;
         }
 
-        if (label.equalsIgnoreCase("addplayer") && sender instanceof Player) {
-
-            Player player = (Player) sender;
-            String name = player.getName();
-
-            // Prevent duplicates (optional)
-            boolean already = playerEntries.stream()
-                    .anyMatch(entry -> entry.getName().equalsIgnoreCase(name));
-            if (already) {
-                player.sendMessage("You’re already on the list!");
+        if (name.equals("addplayer")) {
+            if (!sender.hasPermission("blissfuse.addplayer")) {
+                sender.sendMessage(ChatColor.RED + "You don't have permission to run this.");
                 return true;
             }
 
-            // Record ISO timestamp (UTC)
-            String now = Instant.now().toString();
-            playerEntries.add(new PlayerEntry(name, now));
+            if (args.length < 1) {
+                sender.sendMessage(ChatColor.YELLOW + "Usage: /addplayer <playername>");
+                return true;
+            }
+
+            String playerName = args[0];
+
+            boolean exists = playerEntries.stream()
+                    .anyMatch(entry -> entry.getName().equalsIgnoreCase(playerName));
+            if (exists) {
+                sender.sendMessage(ChatColor.RED + playerName + " is already on the list.");
+                return true;
+            }
+
+            String timestamp = Instant.now().toString();
+            playerEntries.add(new PlayerEntry(playerName, timestamp));
             savePlayerList(playerEntries);
 
-            player.sendMessage("Added you at " + now + ". Total entries: "
-                    + playerEntries.size());
-            return false;
+            sender.sendMessage(ChatColor.GREEN
+                    + "Added " + playerName
+                    + " at " + timestamp
+                    + ". Total entries: " + playerEntries.size());
+            return true;
         }
+
         return false;
     }
 
+
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        Connections.saveConnections(connectionsFile);
     }
 
     public static AUBlissFuse getInstance() {

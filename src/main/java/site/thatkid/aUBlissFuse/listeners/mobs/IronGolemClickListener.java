@@ -1,5 +1,6 @@
 package site.thatkid.aUBlissFuse.listeners.mobs;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
@@ -11,6 +12,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.persistence.PersistentDataType;
 import site.thatkid.aUBlissFuse.AUBlissFuse;
 import site.thatkid.aUBlissFuse.custom.items.MaceKey;
+import site.thatkid.aUBlissFuse.listeners.mobs.connections.Connections;
 
 import java.util.*;
 
@@ -52,7 +54,9 @@ public class IronGolemClickListener implements Listener {
                               .get(plugin.IRON_GOLEM_KEY, PersistentDataType.BYTE);
 
         if (isGuide != null && isGuide == (byte) 1) {
-            if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.IRON_BLOCK && event.getPlayer().getInventory().getItemInMainHand().getAmount() > 9) {
+            if (!Connections.isConnected(playerId, "chicken")) {
+                player.sendMessage(ChatColor.YELLOW + "And who are you supposed to be?");
+            } else if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.IRON_BLOCK && event.getPlayer().getInventory().getItemInMainHand().getAmount() > 9) {
                 player.getInventory().setItemInMainHand(null);
                 player.sendMessage("§eHello adventurer! I have a ri--");
                 player.sendMessage("§6Ohh, you figured it out");

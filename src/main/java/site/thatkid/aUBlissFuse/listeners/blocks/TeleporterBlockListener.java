@@ -32,7 +32,6 @@ public class TeleporterBlockListener implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getClickedBlock() != null && TeleporterBlock.isTeleporterBlock(event.getClickedBlock())) {
-
             event.setCancelled(true);
 
             if (TeleporterBlock.onTeleporterInteract(event.getPlayer(), event.getClickedBlock())) {

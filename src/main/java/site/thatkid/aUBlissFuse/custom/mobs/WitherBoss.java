@@ -2,6 +2,7 @@ package site.thatkid.aUBlissFuse.custom.mobs;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Entity;
@@ -11,6 +12,7 @@ import org.bukkit.entity.WitherSkeleton;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -37,6 +39,8 @@ public class WitherBoss implements Listener {
         boss.setGlowing(true);
         boss.getPersistentDataContainer().set(AUBlissFuse.BOSS_KEY,
                 PersistentDataType.BYTE, (byte) 1);
+        ItemStack item = new ItemStack(Material.STONE_AXE);
+        boss.getEquipment().setItemInMainHand(item);
 
         // 3) Set up Attributes
         AttributeInstance maxHealth = boss.getAttribute(Attribute.GENERIC_MAX_HEALTH);
