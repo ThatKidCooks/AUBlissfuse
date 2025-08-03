@@ -64,7 +64,7 @@ public class ChickenClickListener implements Listener {
                 player.sendMessage(ChatColor.YELLOW + "Oh finally took you long enough");
                 player.sendMessage(ChatColor.GREEN + "Now I can upgrade my armour");
                 player.sendMessage(ChatColor.GREEN + "Here ya go");
-                player.sendMessage(ChatColor.RED + "The iron golem know where it is at *** ***");
+                player.sendMessage(ChatColor.RED + "The iron golem know where it is at 368 -5214");
                 player.sendMessage(ChatColor.RED + "Now SCRAM!!!");
                 Connections.connectionsMap.put(playerId, new EntityConnections(true, true, Connections.isConnected(playerId, "ironGolem")));
                 event.setCancelled(true);

@@ -1,5 +1,6 @@
 package site.thatkid.aUBlissFuse.listeners.mobs;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -8,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.util.io.BukkitObjectInputStream;
 import site.thatkid.aUBlissFuse.AUBlissFuse;
 import site.thatkid.aUBlissFuse.custom.items.MaceKey;
 import site.thatkid.aUBlissFuse.listeners.mobs.connections.Connections;
@@ -17,16 +19,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class VillagerClickListener implements Listener {
+public class InfuseTpClickListener implements Listener {
     private final AUBlissFuse plugin;
     private static final Map<UUID, Long> cooldowns = new HashMap<>();
     private static final long COOLDOWN_TIME = 3000;
 
-    public VillagerClickListener(AUBlissFuse plugin) {
+    public InfuseTpClickListener(AUBlissFuse plugin) {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = false)
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         Player player = (Player) event.getPlayer();
 
@@ -50,27 +52,19 @@ public class VillagerClickListener implements Listener {
         if (!(clicked instanceof Villager)) return;
 
         Villager villager = (Villager) clicked;
-        Byte isGuide = villager.getPersistentDataContainer()
-                              .get(plugin.GUIDE_KEY, PersistentDataType.BYTE);
+        Byte isInfuseTp = villager.getPersistentDataContainer()
+                .get(plugin.INFUSE_SERVER_TP, PersistentDataType.BYTE);
 
-        if (isGuide != null && isGuide == (byte) 1) {
-            if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.PLAYER_HEAD) {
-                player.getInventory().setItemInMainHand(null);
-                player.sendMessage("§eHello adventurer! I'm hun-");
-                player.sendMessage("§6Ohh, you got me one.");
-                player.sendMessage("§9I guess I have to tell you where the mace is...");
-                player.sendMessage("§eAsk the chicken at -3503, 1376 and leave me to eat this in piece.");
-                Connections.connectionsMap.put(playerId, new EntityConnections(true, Connections.isConnected(playerId, "chicken"), Connections.isConnected(playerId, "ironGolem")));
-            } else {
-                player.sendMessage("§eHello adventurer! I'm hungry!");
-                player.sendMessage("§6Maybe I won't kill you");
-                player.sendMessage("§6If you bring me the head of another.");
-                player.sendMessage("§6Now go. Bring me back my desire and I will tell you the secret");
-                player.sendMessage("§eOf the §9Mace!!!");
-                event.setCancelled(true);
+        if (isInfuseTp != null && isInfuseTp == (byte) 1) {
+            String command = "mvtp " + player.getName() + " world";
+            boolean success = Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+            if (!success) {
+                player.sendMessage("Failed to run command!");
             }
         }
+
     }
+
     private void cleanupOldCooldowns() {
         long currentTime = System.currentTimeMillis();
         cooldowns.entrySet().removeIf(entry -> currentTime - entry.getValue() > COOLDOWN_TIME * 2);

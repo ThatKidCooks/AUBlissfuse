@@ -2,7 +2,7 @@ name: AUBlissFuse
 version: '1.0-SNAPSHOT'
 main: site.thatkid.aUBlissFuse.AUBlissFuse
 api-version: '1.21'
-
+softdepend: [ProtocolLib]
 commands:
   spawnguide:
     description: Spawn your instruction villager
@@ -13,6 +13,13 @@ commands:
   spawnirongolem:
     description: Spawns an iron golem who wants riches
     usage: /spawnirongolem
+  spawninfuseteleporter:
+    description: spawns the tp npc
+    usage: /spawninfuseteleporter
+  spawn_boss:
+    description: spawns boss
+    usage: /spawn_boss
+
   give_mace_key:
     description: Give a mace key item
     usage: /give_mace_key
@@ -31,13 +38,22 @@ commands:
     usage: /finalplayers
     permission: op
 
+  pvp:
+    description: toggles pvp
+    usage: /pvp <on|off|status|toggle>
+    permission: op
+  tempban:
+    description: temperately bans the player
+    usage: /tempban <playername> <time><s|m|h|d|w> <reason>
 permissions:
   customvillager.spawn:
     default: op
   blissfuse.give:
     default: op
-  mod.mute:
-    default: op
+  ability.use:
+    description: Allows the player to use abilities.
+    default: false
+
 
 
 authors: [ ItsMinechook ]

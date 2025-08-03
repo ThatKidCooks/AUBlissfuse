@@ -116,7 +116,7 @@ public class TeleporterBlock {
     }
     private static void performTeleportation(Player player, Block teleporterBlock) {
         World world = player.getWorld();
-        Location finalBoss = new Location(world, 245.5, 63.0, 34.5, -90, 0);
+        Location finalBoss = new Location(world, -5440.5, -25, 224.5, 90, 0);
         finalBoss.add(0, 1, 0);
 
         Location playerLoc = player.getLocation();

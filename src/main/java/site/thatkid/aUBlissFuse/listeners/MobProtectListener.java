@@ -39,6 +39,13 @@ public class MobProtectListener implements Listener {
             if (isGuide != null && isGuide == (byte) 1) {
                 event.setCancelled(true);
             }
+
+            Byte isInfuseTp = v.getPersistentDataContainer()
+                    .get(AUBlissFuse.INFUSE_SERVER_TP, PersistentDataType.BYTE);
+
+            if (isInfuseTp != null && isInfuseTp == (byte) 1) {
+                event.setCancelled(true);
+            }
         }
         else if (target instanceof Chicken) {
             Chicken chicken = (Chicken) target;
